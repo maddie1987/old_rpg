@@ -1,0 +1,76 @@
+{% extends "rpg/base.html" %}
+
+{% load static %}
+
+{% block title %}Story{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'rpg:index' %}">Home</a></li>
+    <li class="breadcrumb-item active">Story</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <a href="{% url 'rpg:newChapter' %}" class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Kapitel hinzufügen</a>
+    </div>
+</div>
+{% if chapters %}
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-striped table-hover">
+            <tr>
+                <th></th>
+                <th>Anno</th>
+                <th>Kapitel</th>
+                <th>Letzte Änderungen</th>
+                <th>Letzter Eintrag</th>
+            </tr>
+            {% for chapter in chapters %}
+            <tr>
+                <td>{% if chapter.lastUpdates %}<span class="glyphicon glyphicon-asterisk text-success"></span>{% endif %}</td>
+                <td>{% if chapter.getStartYear %}{{ chapter.getStartYear }}{% if chapter.getStartYear != chapter.getEndYear %} - {{ chapter.getEndYear }}{% endif %}{% else %}-{% endif %}</td>
+                <td><a href="{% url 'rpg:viewChapter' chapter.id %}">{{ chapter.name }}</a></td>
+                <td>
+                    {% for update in chapter.lastUpdates %}
+                    <small><a href="{% url 'rpg:viewChapterPage' chapter.id update.targetPage %}#{{ update.id }}">Änderung von {{ update.lastUpdateUser.first_name }} am {{ update.getLastUpdateDate }} um {{ update.getLastUpdateTime }}</a></small><br/>
+                    {% endfor %}
+                </td>
+                {% if chapter.lastEntry %}
+                <td><small><a href="{% url 'rpg:viewChapterPage' chapter.id chapter.lastEntryTargetPage %}#{{ chapter.lastEntry.id }}">
+                    Eintrag von {{ chapter.lastEntry.lastUpdateUser.first_name }}
+                    {% if chapter.lastEntry.role %}
+                    mit {{ chapter.lastEntry.role.shortName }}
+                    {% elif chapter.lastEntry.roleName %}
+                    mit {{ chapter.lastEntry.roleName }}
+                    {% else %}
+                    (auktorial)
+                    {% endif %}
+                    am {{ chapter.lastEntry.getLastUpdateDate }} um {{ chapter.lastEntry.getLastUpdateTime }}
+                    </a></small></td>
+                {% else %}
+                <td><small>Keine Einträge</small></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <a href="{% url 'rpg:newChapter' %}" class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Kapitel hinzufügen</a>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-dismissible alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Keine Geschichte...
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% load static %}
+
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModal1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Post kommentieren</h4>
+            </div>
+           <form method="post">
+               <div class="modal-body">
+                   {% csrf_token %}
+                   <input type="hidden" id="type" name="type" />
+                   <div class="form-group">
+                       <textarea class="form-control" rows=3 maxlength="256" id="comment" name="comment" placeholder="Dein Kommentar"></textarea>
+                   </div>
+               </div>
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-default" data-dismiss="modal" id="doneImages">Abbrechen</button>
+                   <button type="submit" class="btn btn-primary">Speichern</button>
+               </div>
+          </form>
+        </div>
+    </div>
+</div>

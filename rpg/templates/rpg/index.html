@@ -1,0 +1,67 @@
+{% extends "rpg/base.html" %}
+
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">Home</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6 col-md-12">
+       <div class="well widget" id="roleWidget" data-url="{% url 'rpg:rolesOverview' %}">
+           <h3>Rollen</h3>
+           {% if roleEdits %}
+           {% for role in roleEdits %}
+           <div class="alert alert-success" data-url="{% url 'rpg:editRole' role.id %}">
+               <span class="helper"></span>
+               <div class="aligned miniImageContainer darkBackground">
+                   <span class="helper"></span>
+                   <img class="aligned" src="{% static '' %}rpg/images/avatars/{{ role.getPreferredPic.destination }}" />
+               </div>
+               <span class="aligned"><a href="{% url 'rpg:editRole' role.id %}">{{ role.getShortName }}</a>
+               zuletzt geändert von {{ role.lastUpdateUser.first_name }} am {{ role.getLastUpdateDate }} um {{ role.getLastUpdateTime }}
+               </span>
+           </div>
+           {% endfor %}
+           {% endif %}
+       </div>
+    </div>
+    <div class="col-lg-6 col-md-12">
+       <div class="well widget" id="storyWidget" data-url="{% url 'rpg:storyOverview' %}">
+           <h3>Story</h3>
+           {% if postUpdates %}
+           {% for chapter in postUpdates %}
+           <div class="row">
+               <div class="col-lg-4 col-md-12 text-"><strong>{{ chapter.name }}</strong></div>
+               <div class="col-lg-8 col-md-12">
+                   <a href="{% url 'rpg:viewChapterPage' chapter.id chapter.lastEntryTargetPage %}#{{ chapter.lastEntry.id }}">
+                        Letzter Eintrag von {{ chapter.lastEntry.lastUpdateUser.first_name }}
+                        {% if chapter.lastEntry.role %}
+                        mit {{ chapter.lastEntry.role.shortName }}
+                        {% elif chapter.lastEntry.roleName %}
+                        mit {{ chapter.lastEntry.roleName }}
+                        {% else %}
+                        (auktorial)
+                        {% endif %}
+                        am {{ chapter.lastEntry.getLastUpdateDate }} um {{ chapter.lastEntry.getLastUpdateTime }}
+                   </a>
+               </div>
+           </div>
+
+           {% for update in chapter.lastUpdates %}
+           <div class="alert alert-success" data-url="{% url 'rpg:viewChapterPage' chapter.id update.targetPage %}#{{ update.id }}" >
+               Änderung von {{ update.lastUpdateUser.first_name }} am {{ update.getLastUpdateDate }} um {{ update.getLastUpdateTime }}
+           </div>
+           {% endfor %}
+           <div class="bottom-spacer-20"></div>
+           {% endfor %}
+           {% endif %}
+       </div>
+    </div>
+</div>
+{% endblock %}

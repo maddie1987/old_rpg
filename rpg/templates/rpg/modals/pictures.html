@@ -1,0 +1,47 @@
+{% load static %}
+
+<div class="modal fade" id="pictureModal" tabindex="-1" role="dialog" aria-labelledby="pictureModalLabel1">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Bildergalerie</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    {% if role %}
+                    {% for pic in role.picture_set.all %}
+                        <div class="thumbnailContainer col-lg-3 col-md-4 col-sm-6">
+                            <div class="thumbnail">
+                                <div class="caption">
+                                    <div class="btn-group-container">
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            <button type="button" class="btn {% if pic.isFavorite %}btn-danger{% else %} btn-default {% endif %} favorize" title="Als Anzeigebild wählen"><i class="fa fa-heart"></i></button>
+                                            <button type="button" class="btn btn-default remove" title="Bild löschen"><i class="fa fa-minus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="addImage">
+                                    <img src="{% static '' %}rpg/images/avatars/{{ pic.destination }}" />
+                                </div>
+                                <input type="hidden" name="existing_picture_{{ forloop.counter }}" id="existing_picture_{{ forloop.counter }}" value="{{ pic.destination }}" />
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                    <div class="thumbnailContainer col-lg-3 col-md-4 col-sm-6" data-number="1">
+                        <div class="thumbnail">
+                            <a href="#" class="btn btn-default addImage">
+                                <i class="fa fa-plus fa-5x"></i>
+                            </a>
+                        </div>
+                        <input type="file" class="hidden" id="picture1" name="picture_1" />
+                    </div>
+                    <input type="hidden" name="favorite" id="favorite" value="{% if role.getFavoritePic %}{{ role.getFavoritePic.destination }} {% endif %}"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="doneImages">Fertig</button>
+            </div>
+        </div>
+    </div>
+</div>

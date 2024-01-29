@@ -1,0 +1,70 @@
+{% extends "rpg/base.html" %}
+
+{% block title %}
+{% if chapter %}
+Kapitel: {{ chapter.name }}
+{% else %}
+Neues Kapitel
+{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'rpg:index' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'rpg:storyOverview' %}">Story</a></li>
+    {% if chapter %}
+    <li class="breadcrumb-item active">{{ chapter.name }}</li>
+    {% else %}
+    <li class="breadcrumb-item active">Neues Kapitel</li>
+    {% endif %}
+</ol>
+{% endblock %}
+
+{% block content %}
+<h1>
+    {% if chapter %}
+    {{ chapter.name }}
+    {% else %}
+    Neues Kapitel
+    {% endif %}
+
+</h1>
+<form class="form-horizontal well bs-component" action="{% url 'rpg:saveChapter' id %}" method="post">
+    {% csrf_token %}
+    <fieldset id="chapterData">
+        <legend></legend>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <input class="form-control" id="name" name="name" placeholder="Kapitelname" type="text" value="{% if chapter %}{{ chapter.name }}{% endif %}"/>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <div class="form-group">
+            {% if chapter %}
+                <div class="col-md-1 col-sm-1">
+                    <a href="{% url 'rpg:archiveChapter' chapter.id %}" class="btn btn-default"><i class="fa fa-archive"></i></a>
+                </div>
+            {% else %}
+                <div class="col-md-1 col-sm-1"></div>
+            {% endif %}
+            <div class="col-md-offset-7 col-md-4 col-sm-offset-5 col-sm-6">
+                <div class="btn-group btn-group-justified">
+                    <div class="btn-group">
+                        <a href="{% url 'rpg:storyOverview' %}" class="btn btn-default">Abbrechen</a>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                        {% if chapter %}
+                            Speichern
+                        {% else %}
+                            Erstellen
+                        {% endif %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}

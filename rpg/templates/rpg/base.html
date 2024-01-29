@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'rpg/bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'rpg/bootstrap-3.3.7-dist/css/bootstrap_slate.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'rpg/summernote-0.8.9-dist/summernote.css' %}" />
+        <link rel="stylesheet" href="{% static 'rpg/font-awesome-5.4.1/css/all.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'rpg/bootstrap-datepicker-1.6.4-dist/css/bootstrap-datepicker3.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'rpg/timesheet/timesheet.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'rpg/css/style.css' %}" />
+        <script src="{% static 'rpg/js/jquery.min.js' %}"></script>
+        <script src="{% static 'rpg/bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'rpg/summernote-0.8.9-dist/summernote.js' %}"></script>
+        <script src="{% static 'rpg/bootstrap-datepicker-1.6.4-dist/js/bootstrap-datepicker.min.js' %}"></script>
+        <script src="{% static 'rpg/underscore-1.8.3/underscore-min.js' %}"></script>
+        <script src="{% static 'rpg/timesheet/timesheet.min.js' %}"></script>
+        <script src="{% static 'rpg/js/script.js' %}"></script>
+        <title>
+            RPG | {% block title %}{% endblock %}
+        </title>
+    </head>
+    <body>
+    {% block header %}
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand">RPG</span>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <!--<ul class="nav navbar-nav">-->
+                        <!--<li{% if story %} class="active"{% endif %}><a href="{% url 'rpg:storyOverview' %}">Story</a></li>-->
+                        <!--<li{% if roles %} class="active"{% endif %}><a href="{% url 'rpg:rolesOverview' %}">Rollen</a></li>-->
+                    <!--</ul>-->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{% url 'rpg:logout' %}"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    {% endblock %}
+
+    <div class="content">
+        {% block breadcrumbs %}
+        {% endblock %}
+    {% block content %}
+    {% endblock %}
+    </div>
+
+    <footer>
+        <p><small>Copyright 2021 by Maddie</small></p>
+    </footer>
+    {% block modals %}
+    {% endblock %}
+    </body>
+</html>

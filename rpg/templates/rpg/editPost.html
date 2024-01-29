@@ -1,0 +1,164 @@
+{% extends "rpg/base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ chapter.name }}: Post
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'rpg:index' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'rpg:storyOverview' %}">Story</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'rpg:viewChapter' chapter.id %}">{{ chapter.name }}</a></li>
+    {% if post %}
+    <li class="breadcrumb-item active">Post bearbeiten</li>
+    {% else %}
+    <li class="breadcrumb-item active">Post erstellen</li>
+    {% endif %}
+</ol>
+{% endblock %}
+
+{% block content %}
+
+<h1>
+    {% if post %}
+    Post bearbeiten
+    {% else %}
+    Post erstellen
+    {% endif %}
+</h1>
+{% for entry in mostRecentEntries %}
+    {% if entry.type == 'post' %}
+        <div class="well entry post top-spacer-10 bottom-spacer-10">
+            <div class="header">
+                <h4>{% if entry.role %}
+                    {{ entry.role.shortName }}
+                    {% elif entry.roleName %}
+                    {{ entry.roleName }}
+                    {% else %}
+                    Auktorial
+                    {% endif %}</h4>
+            </div>
+            <div class="content">
+                {{ entry.text|safe }}
+            </div>
+            <div class="footer text-muted">
+                <p class="pull-right"><small>Zuletzt geändert von {{ entry.lastUpdateUser.first_name }} am {{ entry.getLastUpdateDate }} um {{ entry.getLastUpdateTime }}</small></p>
+                <p class="clear"></p>
+            </div>
+        </div>
+
+    {% elif entry.type == 'talk' %}
+    {% endif %}
+{% endfor %}
+<form class="form-horizontal well bs-component"
+      id="postForm"
+      {% if post %}
+      action="{% url 'rpg:savePost' chapter.id post.id %}"
+      {% else %}
+      action="{% url 'rpg:savePost' chapter.id 0 %}"
+      {% endif %}
+      method="post">
+    {% csrf_token %}
+    {% if not post %}
+    <input type="hidden" name="precedent" value="{{ precedent }}" />
+   {% endif %}
+    <fieldset id="postData" class="bottom-spacer-10">
+        <div class="col-sm-4">
+            <div id="yearConfig" class="bottom-spacer-10">
+                <input class="form-control" type="number"
+                       min="{% if minyear %}{{ minyear }}{% else %}0{% endif %}"
+                       max="{% if maxyear %}{{ maxyear }}{% endif %}"
+                       value="{% if post %}{{ post.year }}{% else %}{{ minyear }}{% endif %}"
+                       required="required"
+                       step="1" name="year" id="year" placeholder="Jahr" autocomplete="off"/>
+            </div>
+            <div id="roleStatus" class="radio bottom-spacer-10">
+                <label>
+                    <input type="radio" id="roleStatus1" value="fixed"
+                           {% if post and post.role %}checked{% endif %}/> Feste Rolle
+                </label>
+                <label>
+                    <input type="radio" id="roleStatus2" value="custom"
+                           {% if post and post.roleName %}checked{% endif %}/> Nebenrolle
+                </label>
+            </div>
+            <div class="bottom-spacer-10" id="sideRoleConfig" style="display: none;">
+                <input class="form-control" type="text" id="name" name="name" placeholder="Name" value="{% if post and post.roleName %}{{ post.roleName }}{% endif %}" />
+            </div>
+            <div class="bottom-spacer-10" id="roleConfig" style="display: none;">
+                <select class="form-control" id="role" name="role" data-url="{% url 'rpg:getPicsForRole' %}" data-static="{% static 'rpg/images/avatars/' %}">
+                    <option></option>
+                    {% for role in roles %}
+                    <option value="{{ role.id }}" {% if post and post.role and post.role.id == role.id %}selected{% endif %}>{{ role.shortName }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="rolePic" class="bottom-spacer-10" style="display: none;">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <div class="bigImageContainer .lightBackground">
+                            <span class="helper"></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu image-dropdown">
+                    </ul>
+                    <input type="hidden" id="picture" name="picture" {% if post and post.picture %}value="{{ post.picture.id }}" data-dest="{{ post.picture.destination }}"{% endif %} />
+                </div>
+            </div>
+            <div id="youtubeConfig" class="top-spacer-20 bottom-spacer-10">
+                <input class="form-control" type="text" name="youtube" id="youtube" placeholder="Youtube link"
+                       value="{% if post and post.youtube %}https://www.youtube.com/watch?v={{ post.youtube }}{% endif %}"/>
+            </div>
+        </div>
+
+        <div class="col-sm-8">
+            <textarea id="text" name="text" class="summernote">{% if post.text %}{{ post.text }} {% endif %}</textarea>
+        </div>
+    </fieldset>
+    <fieldset class="bottom-spacer-10">
+        <div class="col-md-offset-8 col-md-4 col-sm-offset-6 col-sm-6">
+            <div class="btn-group btn-group-justified">
+                <div class="btn-group">
+                    <a href="{% url 'rpg:viewChapter' chapter.id %}{% if precedent %}#{{ precedent }}{% elif post %}#{{ post.id }}{% endif %}" class="btn btn-default">Abbrechen</a>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">
+                    {% if post %}
+                        Speichern
+                    {% else %}
+                        Erstellen
+                    {% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+{% for futureEntry in nextEntries %}
+    {% if futureEntry.type == 'post' %}
+        <div class="well entry post top-spacer-10 bottom-spacer-10">
+            <div class="header">
+                <h4>{% if futureEntry.role %}
+                    {{ futureEntry.role.shortName }}
+                    {% elif futureEntry.roleName %}
+                    {{ futureEntry.roleName }}
+                    {% else %}
+                    Auktorial
+                    {% endif %}</h4>
+            </div>
+            <div class="content">
+                {{ futureEntry.text|safe }}
+            </div>
+            <div class="footer text-muted">
+                <p class="pull-right"><small>Zuletzt geändert von {{ futureEntry.lastUpdateUser.first_name }} am {{ futureEntry.getLastUpdateDate }} um {{ futureEntry.getLastUpdateTime }}</small></p>
+                <p class="clear"></p>
+            </div>
+        </div>
+
+    {% elif entry.type == 'talk' %}
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,196 @@
+{% extends "rpg/base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ chapter.name }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'rpg:index' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'rpg:storyOverview' %}">Story</a></li>
+    <li class="breadcrumb-item active"><a class="editLink" href="{% url 'rpg:editChapter' chapter.id %}">{{ chapter.name }} <i class="fa fa-edit"></i></a></li>
+</ol>
+{% endblock %}
+
+{% block content %}
+
+{% if not entries %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-dismissible alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Noch keine Einträge...
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="row">
+    <div class="col-xs-12">
+        <!--<a href="{% url 'rpg:addTalk' chapter.id predecessor %}" class="btn btn-default btn-xs"><i class="fa fa-comments"></i> Gespräch einfügen</a>-->
+        <a href="{% url 'rpg:addPost' chapter.id predecessor %}#postForm" class="btn btn-default btn-xs left-spacer-10"><i class="fa fa-book"></i> Post einfügen</a>
+    </div>
+</div>
+{% for entry in entries %}
+
+
+<div id="{{ entry.id }}" class="well entry {{ entry.type }} top-spacer-10 bottom-spacer-10">
+    <div class="header">
+        <a href="{% url 'rpg:editPost' chapter.id entry.id %}#postForm" class="btn btn-xs btn-default pull-right"><i class="far fa-edit"></i> Bearbeiten</a>
+        <button type="button" data-toggle="modal" data-target="#commentModal"
+                data-action="{% url 'rpg:createComment' chapter.id entry.id %}"
+                data-type="{{ entry.type }}"
+                class="btn btn-xs btn-default pull-right right-spacer-5">
+            <i class="far fa-comment-alt"></i> Kommentieren
+        </button>
+        <h4>
+            {% if entry.wasNew %}<span class="glyphicon glyphicon-asterisk text-success"></span> {% endif %}
+            {% if entry.role %}
+            <a class="editLink" href="{% url 'rpg:editRole' entry.role.id %}">
+                {{ entry.role.shortName }} <i class="fa fa-edit"></i>
+            </a>
+            {% elif entry.roleName %}
+                {{ entry.roleName }}
+                {% elif entry.utterance_set.all %}
+                Gespräch:
+                {% for r in entry.getParticipants %}
+                    {% if r.shortName %}
+                    <a class="editLink" href="{% url 'rpg:editRole' r.id %}">
+                    {{ r.shortName }}<i class="fa fa-edit"></i>{% if forloop.counter != entry.getNumberOfParticipants %}, {% endif %}
+                    </a>
+                    {% else %}
+                    {{ r }}{% if forloop.counter != entry.getNumberOfParticipants %}, {% endif %}
+                    {% endif %}
+
+                {% endfor %}
+            {% else %}
+                Auktorial
+            {% endif %}
+        </h4>
+    </div>
+    <div class="content{% if entry.comment_set.all %} commented{% endif %}">
+        <div class="meta-column">
+            {% if entry.picture %}
+            <div class="bigImageContainer lightBackground">
+                <span class="helper"></span>
+                <img class="aligned" src="{% static '' %}rpg/images/avatars/{{ entry.picture.destination }}" />
+            </div>
+            {% endif %}
+            {% if entry.youtube %}
+            <div class="youtube">
+                <iframe width="200" height="113" src="https://www.youtube.com/embed/{{ entry.youtube }}?rel=0&amp;showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            {% endif %}
+            <div class="text-muted">Anno {{ entry.year }}</div>
+        </div>
+
+
+        {% if entry.comment_set%}
+        <div class="comment-section">
+            {% for comment in entry.comment_set.all %}
+                {% if comment.user == request.user %}
+                <p class="me">
+                    <span class="text-muted">Ich <small>{{ comment.getCreateDate }}</small>:</span><br>
+                    {{ comment.comment }}
+                </p>
+                {% else %}
+                <p class="you">
+                    <span class="text-muted">{{ comment.user.first_name }} <small>{{ comment.getCreateDate }}</small>:</span><br>
+                    {{ comment.comment }}<br>
+                </p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if entry.type == 'post' %}
+        <div class="text-section">
+            {{ entry.text|safe }}
+        </div>
+        {% elif entry.type == 'talk' %}
+        <div class="speech-section">
+            {% for utterance in entry.sidedUtterances %}
+            <div class="utterance bottom-spacer-5">
+                <div class="role left-role">
+                    {% if utterance.side == "left" %}
+                        {% if utterance.role %}
+                            {% if utterance.picture %}
+                            <div class="aligned miniImageContainer lightBackground">
+                                <span class="helper"></span>
+                                <img class="aligned" src="{% static '' %}rpg/images/avatars/{{ utterance.picture.destination }}" />
+                            </div>
+                            {% else %}
+                            {{ utterance.role.shortName }}
+                            {% endif %}
+                        {% elif utterance.roleName %}
+                            {{ utterance.roleName }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="role right-role">
+                    {% if utterance.side == "right" %}
+                        {% if utterance.role %}
+                            {% if utterance.picture %}
+                            <div class="aligned miniImageContainer lightBackground">
+                                <span class="helper"></span>
+                                <img class="aligned" src="{% static '' %}rpg/images/avatars/{{ utterance.picture.destination }}" />
+                            </div>
+                            {% else %}
+                            {{ utterance.role.shortName }}
+                            {% endif %}
+                        {% elif utterance.roleName %}
+                            {{ utterance.roleName }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="text {{ utterance.side }}">
+                    <p>
+                    {{ utterance.text }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="clear"></div>
+    </div>
+    <div class="footer text-muted">
+        <a href="{% url 'rpg:deletePost' chapter.id entry.id %}" class="btn btn-xs btn-danger pull-right"><i class="far fa-trash-alt"></i> Löschen</a>
+        <p class="pull-left"><small>Zuletzt geändert von {{ entry.lastUpdateUser.first_name }} am {{ entry.getLastUpdateDate }} um {{ entry.getLastUpdateTime }}</small></p>
+        <p class="clear"></p>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <!--<a href="{% url 'rpg:addTalk' chapter.id entry.order %}" class="btn btn-default btn-xs"><i class="fa fa-comments"></i> Gespräch einfügen</a>-->
+        <a href="{% url 'rpg:addPost' chapter.id entry.order %}#postForm" class="btn btn-default btn-xs left-spacer-10"><i class="fa fa-book"></i> Post einfügen</a>
+    </div>
+</div>
+{% endfor %}
+
+{% if totalPages %}
+<div class="row">
+    <div class="col-lg-12">
+        <ul class="pagination pull-right">
+            <li class="page-item">
+                <a class="page-link" href="{% url 'rpg:viewChapterPage' chapter.id 1 %}">&laquo;</a>
+            </li>
+            {% for p in visiblePages %}
+            <li class="page-item{% if p == currentPage %} active{% endif %}">
+                <a class="page-link" href="{% if p != currentPage %}{% url 'rpg:viewChapterPage' chapter.id p %}{% else %}#{% endif %}">{{ p }}</a>
+            </li>
+            {% endfor %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'rpg:viewChapterPage' chapter.id totalPages %}">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+    {% include "rpg/modals/comment.html" %}
+</div>
+{% endif %}
+{% endblock %}
+

@@ -1,0 +1,6 @@
+**/*.pyc
+**/*.sqlite3
+rpg/static/rpg/images/avatars/
+venv/
+/rpg/migrations/
+.idea/

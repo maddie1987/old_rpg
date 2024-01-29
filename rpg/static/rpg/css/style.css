@@ -1,0 +1,555 @@
+html {
+    height: 101%;
+}
+
+header {
+    margin-top: 20px;
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
+a, a:focus {
+    outline: 0;
+}
+
+div.content {
+    margin-top: 20px;
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
+footer {
+    margin-top: 50px;
+    margin-right: 50px;
+    margin-bottom: 20px;
+    margin-left: 50px;
+}
+footer p {
+    text-align: right;
+}
+
+table {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+div.alert {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+div.colorpicker {
+    padding-left: 5px;
+    padding-right: 5px;
+    min-width: 92px;
+}
+
+div.colorpicker a.color {
+    display: block;
+    height: 10px;
+    width: 10px;
+    float: left;
+}
+
+div.colorpicker a.color:nth-child(8n+1) {
+    clear: left;
+}
+
+textarea.textField {
+    resize: vertical;
+}
+
+div.placeholder {
+    clear: both;
+    width: 100%;
+}
+
+div.placeholder.height30 {
+    height: 30px;
+}
+
+div.btn-block-group-2 {
+    width: 100%;
+}
+div.btn-block-group-2 label {
+    width: 50%
+}
+
+.datepicker table tr td.day:hover,
+.datepicker table tr td.focused,
+{
+    background-color: #3a3f44
+}
+
+.top-spacer-5 {
+    margin-top: 5px !important;
+}
+.bottom-spacer-5 {
+    margin-bottom: 5px !important;
+}
+.left-spacer-5 {
+    margin-left: 5px !important;
+}
+.right-spacer-5 {
+    margin-right: 5px !important;
+}
+
+.top-spacer-10 {
+    margin-top: 10px !important;
+}
+.bottom-spacer-10 {
+    margin-bottom: 10px !important;
+}
+.left-spacer-10 {
+    margin-left: 10px !important;
+}
+.right-spacer-10 {
+    margin-right: 10px !important;
+}
+
+.top-spacer-20 {
+    margin-top: 20px !important;
+}
+.bottom-spacer-20 {
+    margin-bottom: 20px !important;
+}
+.left-spacer-20 {
+    margin-left: 20px !important;
+}
+.right-spacer-20 {
+    margin-right: 20px !important;
+}
+
+.top-spacer-40 {
+    margin-top: 40px !important;
+}
+.bottom-spacer-40 {
+    margin-bottom: 40px !important;
+}
+.left-spacer-40 {
+    margin-left: 40px !important;
+}
+.right-spacer-40 {
+    margin-right: 40px !important;
+}
+
+.thumbnail {
+    min-height: 250px;
+    max-height: 250px;
+    height: 250px;
+}
+
+.thumbnail img {
+    max-height: 180px;
+    max-width: 90% !important;
+    margin: auto;
+    display: block;
+}
+
+div.thumbnail a.btn.addImage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 75px;
+    width: 81px;
+    color: #7a8288;
+}
+
+div.thumbnail .addImage:not('.btn') {
+    display: table;
+    height: 100%;
+}
+
+.btn-group-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.btn-group-container .btn-group {
+    width: 100%;
+}
+
+.btn-group-container .btn-group button{
+    width: 50%;
+}
+
+.pic-container {
+    height: 145px;
+    display: table;
+    width: 100%;
+}
+
+.pic-container a {
+    margin-left: auto;
+    margin-right: auto;
+    display: table-cell;
+    vertical-align: middle;
+    width: 145px;
+}
+
+img.img-display {
+    max-height: 144px;
+    max-width: 250px;
+}
+
+div.well-divider {
+    width: 100%;
+    height: 0px;
+    border-top: 1px solid #3a3f44;
+}
+
+.table-relations thead th:nth-child(1) {
+    width: 20%;
+}
+.table-relations thead th:nth-child(2) {
+    width: 80%;
+}
+.table-relations thead th:nth-child(3){
+    width: 60px;
+    min-width: 60px;
+}
+
+.table-role-overview td:nth-child(1) {
+}
+.table-role-overview td:nth-child(2) {
+    width: 350px;
+}
+
+.table-role-overview a {
+    display: block;
+    width: 100%;
+}
+.table-role-overview a:hover {
+    text-decoration: none;
+}
+
+.table-relations tbody td ul.dropdown-menu {
+    width: 30vw;
+}
+
+.table-relations ul.dropdown-menu li.thumbnailed {
+    height: 60px;
+}
+.table-relations ul.dropdown-menu li.thumbnailed a {
+    padding: 5px;
+    height: 60px;
+}
+
+
+div.miniImageContainer {
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    margin-right: 10px;
+    /*background-color: #1C1E22;*/
+    border-radius: 4px;
+}
+
+div.miniGlyphContainer {
+    width: 25px;
+    height: 50px;
+    text-align: center
+}
+
+div.miniImageContainer.favorite {
+    background-color: #62C462;
+}
+
+.lightBackground {
+    background-color: #3a3f44;
+}
+.darkBackground {
+    background-color: #1C1E22;
+}
+
+.mediumBackground {
+    background-color: #272b30;
+}
+
+div.bigImageContainer {
+    height: 200px;
+    width: 200px;
+    text-align: center;
+    margin-right: 10px;
+    /*background-color: #3a3f44;*/
+    border-radius: 8px;
+}
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.aligned {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    max-width: 95%;
+}
+
+.miniImageContainer img.aligned {
+    max-width: 49px;
+    max-height: 49px;
+    margin-left: -3px;
+}
+.miniImageContainer a.aligned {
+    max-width: 49px;
+    max-height: 49px;
+}
+.miniImageContainer a.aligned img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.bigImageContainer img.aligned {
+    max-width: 200px;
+    max-height: 200px;
+    margin-left: -4px;
+}
+
+#characterDescription textarea {
+    width: 100%;
+    resize: vertical;
+}
+
+.datepickerContainer input:disabled {
+    background: #fff;
+    cursor: text;
+}
+
+div.widget {
+    cursor: pointer;
+    transition: 0.3s;
+}
+div.widget:hover {
+    background-color: transparent;
+    background-image: -webkit-linear-gradient(#484e55, #3a3f44 60%, #313539);
+    background-image: -o-linear-gradient(#484e55, #3a3f44 60%, #313539);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#484e55), color-stop(60%, #3a3f44), to(#313539));
+    background-image: linear-gradient(#484e55, #3a3f44 60%, #313539);
+    background-repeat: no-repeat;
+}
+div.widget .alert.alert-success{
+    transition: 0.3s;
+    margin: 10px 0px;
+    padding: 3px;
+    background-color: transparent;
+}
+div.widget .alert.alert-success:hover {
+    background-color: #62C462;
+}
+div.widget .alert a {
+    font-weight: bold;
+    text-decoration: none;
+}
+div.widget .alert a:hover {
+    text-decoration: underline;
+}
+
+div.radio label:not(:first-child) {
+    margin-left: 20px;
+}
+
+.note-editor.note-frame .note-editing-area .note-editable {
+    background-color: #1C1E22 !important;
+    color: #C8C8C8 !important;
+}
+
+textarea {
+    resize: none;
+}
+.note-popover .popover-content .note-color .dropdown-menu,.panel-heading.note-toolbar .note-color .dropdown-menu {
+    min-width: inherit;
+}
+
+ul.dropdown-menu.image-dropdown {
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-top: 0px;
+    min-width: inherit;
+    max-width: 375px;
+}
+
+ul.dropdown-menu.image-dropdown li {
+    float: left;
+    margin-top: 10px;
+}
+
+a.editLink {
+    color: inherit;
+}
+a.editLink i {
+    width: 0px;
+    padding-left: 0px
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    opacity: 0;
+}
+a.editLink:hover {
+    text-decoration: none;
+    color: #fff;
+}
+a.editLink:hover i {
+    width: auto;
+    padding-left:5px;
+    opacity: 1;
+}
+
+div.entry {
+    min-width: 600px;
+}
+
+div.entry .header {
+    padding-bottom: 10px;
+    border-bottom: #7A8288 solid 1px;
+}
+div.entry .btn {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    -webkit-transition: opacity 0.6s ease;
+    -moz-transition: opacity 0.6s ease;
+    -o-transition: opacity 0.6s ease;
+}
+div.entry:hover .btn {
+    opacity: 1;
+}
+
+div.entry .content {
+    padding-top: 20px;
+    padding-bottom: 10px;
+    margin: 0px;
+}
+div.entry .content .meta-column {
+    width: 200px;
+    float: left;
+}
+
+div.entry .content .meta-column div {
+    margin-bottom: 10px;
+}
+div.entry .content .meta-column div.youtube iframe {
+    border-radius: 8px;
+}
+
+div.entry .content .text-section,
+div.entry .content .speech-section {
+    margin-left: 220px;
+    margin-right: 10px;
+    overflow: auto;
+    padding:  5px 5px 0px 10px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+div.entry .content.commented .text-section,
+div.entry .content.commented .speech-section {
+    margin-right: 220px;
+}
+
+div.entry .content .speech-section .utterance {
+    float: left;
+    width: 100%;
+}
+
+div.entry .content .speech-section .utterance .role.left-role {
+    float: left;
+    text-align: left;
+    width: 100px;
+}
+div.entry .content .speech-section .utterance .role.right-role {
+    float: right;
+    text-align: right;
+    width: 100px;
+}
+
+div.entry .content .speech-section .utterance .text {
+    margin-left: 110px;
+    margin-right: 110px;
+    text-align: center;
+}
+div.entry .content .speech-section .utterance .text.left {
+    text-align: left;
+}
+div.entry .content .speech-section .utterance .text.right {
+    text-align: right;
+}
+
+div.entry .content .comment-section {
+    float: right;
+    width: 200px;
+}
+div.entry .content .comment-section p,
+div.entry .content .speech-section .utterance .text p{
+    border-radius: .4em;
+    background-color: #3A3F44;
+    padding: 10px;
+    position: relative;
+}
+div.entry .content .comment-section p.you,
+div.entry .content .speech-secti .utterance .text.right p {
+    margin-left: 20px;
+}
+
+div.entry .content .comment-section p.you:after,
+div.entry .content .speech-section .utterance .text.left p:after {
+    content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	border-right-color: #3A3F44;
+	border-left: 0;
+	border-top: 0;
+	margin-top: -10px;
+	margin-left: -10px;
+}
+div.entry .content .comment-section p.me,
+div.entry .content .speech-section .utterance .text.right p {
+    text-align: right;
+}
+div.entry .content .comment-section p.me:after,
+div.entry .content .speech-section .utterance .text.right p:after{
+    content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	border-left-color:#3A3F44;
+	border-right: 0;
+	border-top: 0;
+	margin-top: -10px;
+	margin-right: -10px;
+}
+
+div.entry .footer {
+    border-top: #7A8288 solid 1px;
+    padding-top: 10px;
+    width: 100%;
+}
+div.entry .footer p {
+    margin: 0px;
+}
+
+.clear {
+    clear: both;
+}
+
+div.add-buttons {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    -webkit-transition: opacity 0.6s ease;
+    -moz-transition: opacity 0.6s ease;
+    -o-transition: opacity 0.6s ease;
+}
+
+div.add-buttons:hover {
+    opacity: 1;
+}

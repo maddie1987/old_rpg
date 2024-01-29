@@ -1,0 +1,249 @@
+{% extends "rpg/base.html" %}
+
+{% load static %}
+
+{% block title %}
+{% if role and role.id > 0 %}
+Rolle bearbeiten
+{% else %}
+Neue Rolle
+{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'rpg:index' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'rpg:rolesOverview' %}">Rollen</a></li>
+    {% if role %}
+    <li class="breadcrumb-item active">{{ role.shortName }}</li>
+    {% else %}
+    <li class="breadcrumb-item active">Neue Rolle</li>
+    {% endif %}
+</ol>
+{% endblock %}
+
+{% block content %}
+<h1>
+    {% if role %}
+    {{ role.shortName }}
+    {% else %}
+    Neue Rolle
+    {% endif %}
+</h1>
+<form class="form-horizontal well bs-component" id="roleForm" enctype="multipart/form-data" action="{% url 'rpg:saveRole' id %}" method="post">
+    {% csrf_token %}
+    <fieldset id="roleData">
+        <legend>Person</legend>
+        <div class="row">
+            <div class="col-sm-5 col-md-4 col-lg-3 bottom-spacer-20">
+                <div class="pic-container center-block">
+                    <a href="#" class="text-center" data-toggle="modal" data-target="#pictureModal" data-keyboard="false" data-backdrop="static">
+                        {% if role.getPreferredPic %}
+                            <img src="{% static '' %}rpg/images/avatars/{{ role.getPreferredPic.destination }}" class="img-display"/>
+                        {% else %}
+                            <img src="{% static 'rpg/images/default.png' %}" class="img-display" />
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-7 col-md-8 col-lg-9">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <input class="form-control" maxlength="256" id="fullName" name="fullName" placeholder="Voller Name" type="text"
+                               value="{% if role %}{{ role.fullName }}{% endif %}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input class="form-control" maxlength="100" id="shortName" name="shortName" placeholder="Angezeigter Name" type="text"
+                               value="{% if role %}{{ role.shortName }}{% endif %}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-5 col-sm-4 col-xs-3">
+                        <div class="datepickerContainer">
+                            <input autocomplete="off" type="text" placeholder="Geburtsdatum unbekannt" name="born" id="born" class="form-control"
+                                   value="{% if role and role.born %}{{ role.getFormBirthDate }}{% endif %}">
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-4 col-xs-3">
+                        <div class="datepickerContainer">
+                            <input autocomplete="off" type="text" placeholder="Todesdatum unbekannt" name="died" id="died" class="form-control"
+                                   value="{% if role and role.died %}{{ role.getFormDeathDate }}{% endif %}">
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-4 col-xs-6">
+                        <div class="btn-group pull-right btn-block-group-2" data-toggle="buttons">
+                            <label class="btn btn-primary {% ifequal role.sex 'f' %}active{% endifequal %}">
+                                <input type="radio" name="sex" id="female" value="f" autocomplete="off" /><i class="fa fa-venus"></i>
+                            </label>
+                            <label class="btn btn-primary {% ifequal role.sex 'm' %}active{% endifequal %}">
+                                <input type="radio" name="sex" id="male" value="m" autocomplete="off"  /><i class="fa fa-mars"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </fieldset>
+
+    <div class="well-divider bottom-spacer-10"></div>
+    <fieldset id="relations">
+        <legend>Umfeld</legend>
+        <div class="form-group">
+            <div class="col-xs-12">
+                <table class="table table-hover table-relations">
+                    <thead>
+                        <tr>
+                            <th>Beziehung</th>
+                            <th>Rolle</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for relation in role.getRelationsOf %}
+                            <tr id="relationContainer{{ forloop.counter }}">
+                                <td class="relation-type">
+                                    <div>
+                                        <div style="height:50px">
+                                            <span style="margin-top:15px;" class="pull-left">
+                                                {% if relation.type == 'spouse' %}
+                                                Partner von
+                                                {% elif relation.type == 'parent' %}
+                                                Elternteil von
+                                                {% elif relation.type == 'sibling' %}
+                                                Geschwister von
+                                                {% elif relation.type == 'child' %}
+                                                Kind von
+                                                {% elif relation.type == 'friend' %}
+                                                Freund von
+                                                {% elif relation.type == 'enemy' %}
+                                                Feind von
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="relationType{{ forloop.counter }}" name="relation_type_{{ forloop.counter }}" value="{{relation.type}}" />
+                                </td>
+                                <td class="relation-role">
+                                    <div>
+                                        <div style="height:50px;">
+                                            <span class="helper"></span>
+                                            <div class="aligned miniImageContainer darkBackground">
+                                                <span class="helper"></span>
+                                                <img class="aligned" src="{% static '' %}rpg/images/avatars/{{ relation.target.getPreferredPic.destination }}" />
+                                            </div>
+                                            <span class="aligned">{{ relation.target.shortName }}</span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="relationTarget{{ forloop.counter }}" name="relation_target_{{ forloop.counter }}" value="{{relation.target.id}}" />
+                                </td>
+                                <td>
+                                    <span class="helper"></span>
+                                    <a href="#" class="btn btn-default aligned removeRelation">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr id="relationContainer{{ nextRelation }}" class="newRelation">
+                            <td class="relation-type">
+                                <div class="dropdown">
+                                    <a class="btn btn-secondary btn-block dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        <div style="height:50px;">
+                                            <span style="margin-top:15px;" class="dropdown-chosen pull-left">
+
+                                            </span>
+                                            <span style="margin-top:20px;" class="caret pull-right"></span>
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#" class="dropdown-item relation-item" data-value="">&nbsp;</a></li>
+                                        <li><a href="#" class="dropdown-item relation-item" data-value="parent">Elternteil von</a></li>
+                                        <li><a href="#" class="dropdown-item relation-item" data-value="spouse">Partner von</a></li>
+                                        <li><a href="#" class="dropdown-item relation-item" data-value="sibling">Geschwister von</a></li>
+                                        <li><a href="#" class="dropdown-item relation-item" data-value="child">Kind von</a></li>
+                                        <li><a href="#" class="dropdown-item relation-item" data-value="friend">Freund von</a></li>
+                                        <li><a href="#" class="dropdown-item relation-item" data-value="enemy">Feind von</a></li>
+                                    </ul>
+                                    <input type="hidden" id="relationType{{ nextRelation }}" name="relation_type_{{ nextRelation }}"/>
+                                </div>
+                            </td>
+                            <td class="relation-role">
+                                <div class="dropdown">
+                                    <a class="btn btn-secondary btn-block dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        <div style="height:50px;">
+                                            <span class="relation-role-chosen pull-left dropdown-chosen">
+                                            </span>
+                                            <span style="margin-top:20px;" class="caret pull-right"></span>
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="thumbnailed">
+                                            <a href="#" class="dropdown-item relation-item" data-value="">
+                                                <span class="helper"></span>
+                                            </a>
+                                        </li>
+                                        {% for targetRole in possibleRelations %}
+                                        <li class="thumbnailed">
+                                            <a href="#" class="dropdown-item relation-item" data-value="{{ targetRole.id }}">
+                                                <span class="helper"></span>
+                                                <div class="aligned miniImageContainer darkBackground">
+                                                    <span class="helper"></span>
+                                                    <img class="aligned" src="{% static '' %}rpg/images/avatars/{{ targetRole.getPreferredPic.destination }}" />
+                                                </div>
+                                                <span class="aligned">{{ targetRole.shortName }}</span>
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                    <input type="hidden" id="relationTarget{{ nextRelation }}" name="relation_target_{{ nextRelation }}"/>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="helper"></span>
+                                <a href="#" class="btn btn-default aligned disabled removeRelation">
+                                    <i class="fa fa-minus"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <span class="helper"></span>
+                                <a href="#" class="btn btn-default aligned addRelation disabled">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+
+    {% include "rpg/modals/pictures.html" %}
+    <fieldset>
+        <div class="form-group">
+            <div class="col-md-offset-8 col-md-4 col-sm-offset-6 col-sm-6">
+                <div class="btn-group btn-group-justified">
+                    <div class="btn-group">
+                        <a href="{% url 'rpg:rolesOverview' %}" class="btn btn-default">Abbrechen</a>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                        {% if role %}
+                            Speichern
+                        {% else %}
+                            Erstellen
+                        {% endif %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}
